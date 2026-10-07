@@ -1,0 +1,33 @@
+# Teaching version — images come from Docker Hub.
+# Build & push first (replace the username with yours):
+#   docker build -t your-dockerhub-username/todo-server:1.0 ./server
+#   docker build -t your-dockerhub-username/todo-client:1.0 ./client
+#   docker push your-dockerhub-username/todo-server:1.0
+#   docker push your-dockerhub-username/todo-client:1.0
+# Then:  docker compose up -d
+#
+# NOTE: service names "mongo" and "server" must not change —
+# nginx (client) proxies to server:5000, server connects to mongo:27017.
+
+services:
+  mongo:
+    image: mongo:7
+    networks:
+      - todo-net
+    volumes:
+      - ./mongo-data:/data/db   # bind mount: data lives in this folder on the host
+
+  server:
+    image: srinudev645/todo-server:1.0.0
+    networks:
+      - todo-net
+
+  client:
+    image: srinudev645/todo-client:1.0.0
+    ports:
+      - "80:80"
+    networks:
+      - todo-net
+
+networks:
+  todo-net:
