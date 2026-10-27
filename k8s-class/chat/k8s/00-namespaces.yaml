@@ -1,0 +1,9 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: chat-frontend
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: chat-backend

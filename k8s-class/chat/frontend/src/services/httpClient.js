@@ -1,4 +1,5 @@
-const BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000';
+// unset -> '' = relative URLs (prod: nginx proxies /api to the backend); dev uses .env
+const BASE_URL = import.meta.env.VITE_API_URL ?? '';
 const TIMEOUT_MS = 60000;
 
 export async function post(path, body) {

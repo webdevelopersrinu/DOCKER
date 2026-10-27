@@ -1,0 +1,21 @@
+# Lock down the backend: only pods from the chat-frontend namespace may reach it.
+# NOTE: on EKS with the default VPC CNI, enable network-policy enforcement
+# (or install Calico) or this policy is silently ignored.
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: backend-allow-frontend-only
+  namespace: chat-backend
+spec:
+  podSelector:
+    matchLabels:
+      app: chat-backend
+  policyTypes:
+    - Ingress
+  ingress:
+    - from:
+        - namespaceSelector:
+            matchLabels:
+              kubernetes.io/metadata.name: chat-frontend
+      ports:
+        - port: 5000
