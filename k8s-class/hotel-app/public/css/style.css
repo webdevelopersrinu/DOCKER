@@ -8330,7 +8330,7 @@ h1, h2, h3, h4, h5,
     bottom: 0;
     content: '';
     opacity: .6;
-    background: #2f89fc; }
+    background: #28a745; }
   .hero-wrap .slider-text {
     color: #fff;
     height: 750px; }
@@ -8445,7 +8445,7 @@ h1, h2, h3, h4, h5,
         bottom: 0;
         left: 0;
         right: 0;
-        background: #2f89fc;
+        background: #28a745;
         opacity: .6; }
       .owl-carousel.home-slider .slider-item .slider-text {
         height: 800px;
@@ -8614,20 +8614,20 @@ h1, h2, h3, h4, h5,
         background: #21cc7a;
         color: #fff; }
   .btn.btn-secondary {
-    background: #2f89fc;
-    border: 1px solid #2f89fc;
+    background: #28a745;
+    border: 1px solid #28a745;
     color: #fff; }
     .btn.btn-secondary:hover {
-      border: 1px solid #2f89fc;
+      border: 1px solid #28a745;
       background: transparent;
-      color: #2f89fc; }
+      color: #28a745; }
     .btn.btn-secondary.btn-outline-secondary {
-      border: 1px solid #2f89fc;
+      border: 1px solid #28a745;
       background: transparent;
-      color: #2f89fc; }
+      color: #28a745; }
       .btn.btn-secondary.btn-outline-secondary:hover {
         border: 1px solid transparent;
-        background: #2f89fc;
+        background: #28a745;
         color: #fff; }
   .btn.btn-black {
     background: #000000;
@@ -8775,7 +8775,7 @@ h1, h2, h3, h4, h5,
     .wrap-about .time span a {
       font-size: 34px;
       font-weight: 700;
-      color: #2f89fc; }
+      color: #28a745; }
       @media (max-width: 767.98px) {
         .wrap-about .time span a {
           font-size: 30px; } }
@@ -8892,7 +8892,7 @@ h1, h2, h3, h4, h5,
         color: #000000; }
     .room-wrap .text span.price {
       font-size: 26px;
-      color: #2f89fc;
+      color: #28a745;
       position: relative; }
     .room-wrap .text span.per {
       font-size: 14px;
@@ -8902,11 +8902,11 @@ h1, h2, h3, h4, h5,
       color: #000000;
       border: 2px solid rgba(0, 0, 0, 0.1); }
   .room-wrap:hover, .room-wrap:focus {
-    background: #2f89fc; }
+    background: #28a745; }
     .room-wrap:hover .half.left-arrow:after, .room-wrap:focus .half.left-arrow:after {
-      border-color: transparent #2f89fc transparent transparent; }
+      border-color: transparent #28a745 transparent transparent; }
     .room-wrap:hover .half.right-arrow:after, .room-wrap:focus .half.right-arrow:after {
-      border-color: transparent transparent transparent #2f89fc; }
+      border-color: transparent transparent transparent #28a745; }
     .room-wrap:hover .text .star span, .room-wrap:focus .text .star span {
       color: #fff; }
     .room-wrap:hover .text h3 a, .room-wrap:focus .text h3 a {
@@ -9068,12 +9068,12 @@ h1, h2, h3, h4, h5,
           width: 100%; } }
     .pricing-entry .text .price {
       width: 80px;
-      color: #2f89fc;
+      color: #28a745;
       text-align: right;
       font-size: 20px;
       font-weight: 600; }
   .pricing-entry:hover {
-    background: #2f89fc; }
+    background: #28a745; }
     .pricing-entry:hover .desc h3 {
       color: #fff; }
     .pricing-entry:hover .desc p {
@@ -9095,7 +9095,7 @@ h1, h2, h3, h4, h5,
     left: 0;
     right: 0;
     bottom: 0;
-    background: rgba(47, 137, 252, 0.8);
+    background: rgba(40, 167, 69, 0.8);
     opacity: 0;
     -moz-transition: all 0.3s ease;
     -o-transition: all 0.3s ease;
@@ -9129,7 +9129,7 @@ h1, h2, h3, h4, h5,
         display: none; } }
 
 .aside-stretch-2 {
-  background: #2f89fc; }
+  background: #28a745; }
   .aside-stretch-2:after {
     position: absolute;
     top: 0;
@@ -9137,7 +9137,7 @@ h1, h2, h3, h4, h5,
     bottom: 0;
     content: '';
     width: 360%;
-    background: #2f89fc; }
+    background: #28a745; }
   @media (max-width: 767.98px) {
     .aside-stretch-2 {
       background: transparent; }
@@ -9211,7 +9211,7 @@ textarea.form-control {
 .ftco-footer {
   font-size: 16px;
   padding: 7em 0;
-  background: #2f89fc;
+  background: #28a745;
   position: relative; }
   .ftco-footer .overlay {
     position: absolute;
@@ -9221,7 +9221,7 @@ textarea.form-control {
     bottom: 0;
     content: '';
     opacity: .9;
-    background: #2f89fc; }
+    background: #28a745; }
   .ftco-footer .ftco-footer-logo {
     text-transform: uppercase;
     letter-spacing: .1em; }
@@ -9392,7 +9392,7 @@ textarea.form-control {
   background-position: center center; }
 
 .star span {
-  color: #2f89fc;
+  color: #28a745;
   margin: 0 4px; }
 
 .testimony-section {
@@ -9511,7 +9511,7 @@ textarea.form-control {
   .testimony-wrap .name {
     font-weight: 400;
     margin-bottom: 0;
-    color: #2f89fc;
+    color: #28a745;
     font-weight: 700;
     font-size: 20px; }
   .testimony-wrap .position {
@@ -9677,7 +9677,7 @@ textarea.form-control {
       .blog-entry .text .heading a:hover, .blog-entry .text .heading a:focus, .blog-entry .text .heading a:active {
         color: #21cc7a; }
   .blog-entry .text .meta-chat {
-    color: #2f89fc; }
+    color: #28a745; }
   .blog-entry .text .read {
     color: #000000;
     font-size: 14px; }
@@ -9689,7 +9689,7 @@ textarea.form-control {
   font-size: 15px; }
   .blog-entry .meta > div a {
     font-size: 14px;
-    color: #2f89fc;
+    color: #28a745;
     font-weight: 500; }
     .blog-entry .meta > div a:hover {
       color: #cccccc; }
@@ -9746,7 +9746,7 @@ textarea.form-control {
       -webkit-transform: translate(-50%, -50%);
       -ms-transform: translate(-50%, -50%);
       transform: translate(-50%, -50%);
-      color: #2f89fc; }
+      color: #28a745; }
 
 .block-18 .icon > span {
   font-size: 40px; }
@@ -9779,7 +9779,7 @@ textarea.form-control {
       border: 1px solid transparent; }
 
 .contact-section .contact-info p a {
-  color: #2f89fc; }
+  color: #28a745; }
 
 .contact-section .contact-info p span {
   color: #000000; }
@@ -9863,7 +9863,7 @@ textarea.form-control {
         margin-bottom: 0; }
       .comment-list li .comment-body .meta {
         font-size: 13px;
-        color: #2f89fc;
+        color: #28a745;
         display: inline-block;
         margin-bottom: 20px; }
       .comment-list li .comment-body .reply {
@@ -9954,11 +9954,11 @@ textarea.form-control {
   .sidebar-wrap .heading {
     font-size: 18px; }
   .sidebar-wrap .rate i {
-    color: #2f89fc;
+    color: #28a745;
     margin: 0 4px !important; }
 
 .rate i {
-  color: #2f89fc;
+  color: #28a745;
   margin: 0 4px; }
 
 .sidebar-box {
