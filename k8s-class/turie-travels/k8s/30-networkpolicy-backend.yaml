@@ -1,0 +1,141 @@
+# Default-deny all ingress in turie-backend, then explicit allows below.
+# NOTE: same caveat as chat/k8s/30-networkpolicy.yaml — on EKS with the default
+# VPC CNI, enable network-policy enforcement (or install Calico) or these are
+# silently ignored.
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: default-deny-ingress
+  namespace: turie-backend
+spec:
+  podSelector: {}
+  policyTypes:
+    - Ingress
+---
+# auth-service, booking-service and profile-service are reachable from the
+# outside world via the Ingress controller.
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: allow-ingress-to-auth
+  namespace: turie-backend
+spec:
+  podSelector:
+    matchLabels:
+      app: auth-service
+  policyTypes:
+    - Ingress
+  ingress:
+    - from:
+        - namespaceSelector:
+            matchLabels:
+              kubernetes.io/metadata.name: ingress-nginx
+      ports:
+        - port: 5001
+---
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: allow-ingress-to-booking
+  namespace: turie-backend
+spec:
+  podSelector:
+    matchLabels:
+      app: booking-service
+  policyTypes:
+    - Ingress
+  ingress:
+    - from:
+        - namespaceSelector:
+            matchLabels:
+              kubernetes.io/metadata.name: ingress-nginx
+      ports:
+        - port: 5003
+---
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: allow-ingress-to-profile
+  namespace: turie-backend
+spec:
+  podSelector:
+    matchLabels:
+      app: profile-service
+  policyTypes:
+    - Ingress
+  ingress:
+    - from:
+        - namespaceSelector:
+            matchLabels:
+              kubernetes.io/metadata.name: ingress-nginx
+      ports:
+        - port: 5005
+---
+# catalog-service and notification-service are reachable from the Ingress
+# controller (search, notifications list) AND internally from booking-service
+# (seat reservation, booking-confirmed notification).
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: allow-ingress-and-booking-to-catalog
+  namespace: turie-backend
+spec:
+  podSelector:
+    matchLabels:
+      app: catalog-service
+  policyTypes:
+    - Ingress
+  ingress:
+    - from:
+        - namespaceSelector:
+            matchLabels:
+              kubernetes.io/metadata.name: ingress-nginx
+        - podSelector:
+            matchLabels:
+              app: booking-service
+      ports:
+        - port: 5002
+---
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: allow-ingress-and-booking-to-notification
+  namespace: turie-backend
+spec:
+  podSelector:
+    matchLabels:
+      app: notification-service
+  policyTypes:
+    - Ingress
+  ingress:
+    - from:
+        - namespaceSelector:
+            matchLabels:
+              kubernetes.io/metadata.name: ingress-nginx
+        - podSelector:
+            matchLabels:
+              app: booking-service
+      ports:
+        - port: 5006
+---
+# payment-service is INTERNAL ONLY — never exposed via Ingress, reachable
+# exclusively from booking-service. No ingress-nginx namespace in the `from`
+# list here on purpose.
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: allow-booking-to-payment
+  namespace: turie-backend
+spec:
+  podSelector:
+    matchLabels:
+      app: payment-service
+  policyTypes:
+    - Ingress
+  ingress:
+    - from:
+        - podSelector:
+            matchLabels:
+              app: booking-service
+      ports:
+        - port: 5004

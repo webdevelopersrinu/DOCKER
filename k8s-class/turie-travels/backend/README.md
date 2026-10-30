@@ -50,7 +50,7 @@ curl -X POST localhost:5001/api/v1/auth/signup -H "Content-Type: application/jso
 # -> { success: true, data: { token, user } }
 
 # 2. search buses Hyderabad -> Vizianagaram
-curl "localhost:5002/api/v1/buses/search?from=Hyderabad&to=Vizianagaram"
+curl "localhost:5002/api/v1/catalog/buses/search?from=Hyderabad&to=Vizianagaram"
 
 # 3. book (replace TOKEN and TRIP_ID from the search result's _id)
 curl -X POST localhost:5003/api/v1/bookings -H "Content-Type: application/json" \
@@ -76,15 +76,18 @@ docker compose up --build
 
 ## Deploying to EKS with an Ingress controller
 
-Nothing in the service code changes — point the Ingress at each Service by
-path prefix, e.g.:
+Each service owns exactly ONE shared path prefix (not one per endpoint) —
+that's what lets the Ingress stay a short, fixed list of rules no matter how
+many endpoints a service grows: a brand-new endpoint on an existing service
+never touches the Ingress, only a brand-new service does. See
+`k8s/40-ingress.yaml` for the actual manifest:
 
 ```
-/api/v1/auth(/|$)(.*)          -> auth-service:5001
-/api/v1/(places|flights|trains|buses|trips) -> catalog-service:5002
-/api/v1/bookings(/|$)(.*)      -> booking-service:5003
-/api/v1/profile(/|$)(.*)       -> profile-service:5005
-/api/v1/notifications(/|$)(.*)-> notification-service:5006
+/api/v1/auth          -> auth-service:5001
+/api/v1/catalog        -> catalog-service:5002   (places, flights, trains, buses, trips — all of it)
+/api/v1/bookings       -> booking-service:5003
+/api/v1/profile        -> profile-service:5005
+/api/v1/notifications  -> notification-service:5006
 ```
 
 Don't expose `payment-service` on the Ingress — it's called only internally

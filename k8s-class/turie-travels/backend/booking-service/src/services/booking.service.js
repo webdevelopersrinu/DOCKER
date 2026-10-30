@@ -16,7 +16,7 @@ function fareFor(trip, classType) {
 // instead of letting a raw axios error (no .status) fall through as a generic 500.
 async function fetchTrip(tripId) {
   try {
-    const { data } = await catalogClient.get(`/api/v1/trips/${tripId}`);
+    const { data } = await catalogClient.get(`/api/v1/catalog/trips/${tripId}`);
     return data.data;
   } catch (err) {
     throw new ApiError(err.response?.status || 502, err.response?.data?.message || "Catalog service unavailable");
@@ -48,7 +48,7 @@ export async function createBooking(userId, { tripId, classType, passengers, pay
 
   // Reserve seats up front so two bookings can't overbook the same trip.
   try {
-    await catalogClient.patch(`/api/v1/trips/${tripId}/seats`, { delta: -passengers.length, classType });
+    await catalogClient.patch(`/api/v1/catalog/trips/${tripId}/seats`, { delta: -passengers.length, classType });
   } catch (err) {
     booking.status = "FAILED";
     await bookingRepository.save(booking);
@@ -71,7 +71,7 @@ export async function createBooking(userId, { tripId, classType, passengers, pay
   }
 
   // Payment failed — release the seats we reserved and mark booking failed.
-  await catalogClient.patch(`/api/v1/trips/${tripId}/seats`, { delta: passengers.length, classType }).catch(() => {});
+  await catalogClient.patch(`/api/v1/catalog/trips/${tripId}/seats`, { delta: passengers.length, classType }).catch(() => {});
   booking.status = "FAILED";
   await bookingRepository.save(booking);
   await notify(userId, "PAYMENT_FAILED", `Payment for booking ${booking._id} failed.`);
@@ -94,7 +94,7 @@ export async function cancelBooking(userId, id) {
   if (booking.status !== "CONFIRMED") throw new ApiError(400, "Only confirmed bookings can be cancelled");
 
   await catalogClient
-    .patch(`/api/v1/trips/${booking.tripId}/seats`, { delta: booking.passengers.length, classType: booking.classType })
+    .patch(`/api/v1/catalog/trips/${booking.tripId}/seats`, { delta: booking.passengers.length, classType: booking.classType })
     .catch(() => {});
 
   booking.status = "CANCELLED";

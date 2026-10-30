@@ -1,0 +1,72 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: turie-frontend
+  namespace: turie-frontend
+  labels:
+    app: turie-frontend
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: turie-frontend
+  template:
+    metadata:
+      labels:
+        app: turie-frontend
+    spec:
+      containers:
+        - name: turie-frontend
+          image: srinudev645/turie-travels-frontend:v1
+          ports:
+            - containerPort: 8080
+          resources:
+            requests:
+              cpu: 50m
+              memory: 64Mi
+            limits:
+              cpu: 200m
+              memory: 128Mi
+          readinessProbe:
+            httpGet:
+              path: /health
+              port: 8080
+            initialDelaySeconds: 3
+          livenessProbe:
+            httpGet:
+              path: /health
+              port: 8080
+            initialDelaySeconds: 10
+---
+# ClusterIP only — the Ingress (40-ingress.yaml) is what actually exposes this.
+apiVersion: v1
+kind: Service
+metadata:
+  name: turie-frontend
+  namespace: turie-frontend
+spec:
+  selector:
+    app: turie-frontend
+  ports:
+    - port: 80
+      targetPort: 8080
+---
+apiVersion: autoscaling/v2
+kind: HorizontalPodAutoscaler
+metadata:
+  name: turie-frontend
+  namespace: turie-frontend
+spec:
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: turie-frontend
+  minReplicas: 1
+  maxReplicas: 2
+  metrics:
+    - type: Resource
+      resource:
+        name: cpu
+        target:
+          type: Utilization
+          averageUtilization: 70

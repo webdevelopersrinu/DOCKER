@@ -1,0 +1,92 @@
+# Path-based routing: the frontend (static SPA) and all 6 backend services
+# sit behind ONE ingress-nginx controller, split by URL path instead of by
+# host — there's no real domain yet, just <node-public-ip>:<nodePort>.
+#
+# One path per SERVICE, not per endpoint: each backend owns a single shared
+# prefix (e.g. everything catalog-service serves — places/flights/trains/
+# buses/trips today, more later — lives under /api/v1/catalog, see
+# backend/catalog-service/src/app.js). That's what keeps this file from
+# growing every time a service adds an endpoint — only a brand-new SERVICE
+# needs a new line here, never a new endpoint on an existing one.
+#
+# Two Ingress objects (one per namespace, matching where each Service lives),
+# but ingress-nginx merges every Ingress object it watches into a single
+# nginx.conf keyed by host+path, so this behaves as one routing table. Within
+# that merge, nginx-ingress always matches the MOST SPECIFIC path first
+# regardless of which Ingress object or which order it was applied in — so
+# the backend Ingress's `/api/v1/...` prefixes win over the frontend's `/`
+# catch-all automatically. No ordering, annotation, or priority field needed.
+#
+# `host` is omitted entirely on every rule on purpose: with no DNS yet,
+# omitting host makes the rule match ANY Host header, which is exactly what
+# you get hitting the NodePort directly by IP. Add a real `host:` later once
+# there's a domain, with no other changes required here.
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: turie-backend
+  namespace: turie-backend
+spec:
+  ingressClassName: nginx
+  rules:
+    - http:
+        paths:
+          - path: /api/v1/auth
+            pathType: Prefix
+            backend:
+              service:
+                name: auth-service
+                port:
+                  number: 5001
+          - path: /api/v1/catalog
+            pathType: Prefix
+            backend:
+              service:
+                name: catalog-service
+                port:
+                  number: 5002
+          - path: /api/v1/bookings
+            pathType: Prefix
+            backend:
+              service:
+                name: booking-service
+                port:
+                  number: 5003
+          - path: /api/v1/profile
+            pathType: Prefix
+            backend:
+              service:
+                name: profile-service
+                port:
+                  number: 5005
+          - path: /api/v1/notifications
+            pathType: Prefix
+            backend:
+              service:
+                name: notification-service
+                port:
+                  number: 5006
+          # payment-service (5004) is intentionally absent — internal only,
+          # see 12-payment-service.yaml and 30-networkpolicy-backend.yaml.
+---
+# Catch-all for everything else — the frontend SPA's static files. Lives in
+# a separate Ingress object only because the Service it targets is in a
+# different namespace (turie-frontend); see the header comment above for why
+# that's still one merged routing table with no ordering concerns.
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: turie-frontend
+  namespace: turie-frontend
+spec:
+  ingressClassName: nginx
+  rules:
+    - http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: turie-frontend
+                port:
+                  number: 80
